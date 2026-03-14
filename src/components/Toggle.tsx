@@ -42,7 +42,9 @@ const Slider = styled.span<{ $checked: boolean; $color?: string; $dim?: string }
   border-radius: 30px;
   background: ${({ $checked, $dim, theme }) =>
     $checked ? ($dim ?? theme.greenDim) : theme.bg3};
-  transition: background 0.2s;
+  border: 1px solid ${({ $checked, theme }) =>
+    $checked ? 'transparent' : theme.border2};
+  transition: background 0.2s, border-color 0.2s;
   cursor: pointer;
 
   &::before {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Toggle } from '../../components/Toggle';
 import { ConfirmModal } from '../../components/ConfirmModal';
@@ -22,7 +22,7 @@ export function ProgramEdit() {
   const { id }     = useParams<{ id: string }>();
   const navigate   = useNavigate();
   const { programs, lastAck } = useMQTT();
-  const { setProgram, deleteProgram } = useIrrigation();
+  const { setProgram, deleteProgram, requestSync } = useIrrigation();
   const { showToast } = useToast();
 
   const isNew  = id === 'new';
@@ -33,13 +33,15 @@ export function ProgramEdit() {
   const [days,     setDays]     = useState<number[]>(prog ? decodeDays(prog.days) : []);
   const [zones,    setZones]    = useState<[number,number,number,number]>(prog?.zones ?? [0,0,0,0]);
   const [showDel,  setShowDel]  = useState(false);
+  const initialAck = useRef(lastAck);
 
-  // Ack handler
+  // Ack handler — ignora el ack que ya existía al montar
   useEffect(() => {
-    if (!lastAck) return;
+    if (!lastAck || lastAck === initialAck.current) return;
     if (!lastAck.ok) { showToast(lastAck.error ?? 'Error', 'error'); return; }
     if (lastAck.cmd === 'program' && (lastAck.action === 'set' || lastAck.action === 'delete')) {
       showToast(lastAck.action === 'set' ? 'Programa guardado ✓' : 'Programa eliminado', 'success');
+      requestSync();
       navigate(-1);
     }
   }, [lastAck]);

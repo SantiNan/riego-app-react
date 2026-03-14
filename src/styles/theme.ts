@@ -3,36 +3,36 @@
 // ═══════════════════════════════════════════════════
 
 export const theme = {
-  bg:      '#0a1628',
-  bg2:     '#0f1e38',
-  bg3:     '#162440',
-  surface:  '#1a2d4a',
-  surface2: '#213559',
+  bg:      '#ffffff',
+  bg2:     '#f5f7fa',
+  bg3:     '#eef1f6',
+  surface:  '#f0f2f5',
+  surface2: '#e8ebf0',
 
-  border:  'rgba(255,255,255,0.07)',
-  border2: 'rgba(255,255,255,0.12)',
+  border:  'rgba(0,0,0,0.08)',
+  border2: 'rgba(0,0,0,0.14)',
 
-  text:    '#e8f0fe',
-  text2:   '#8fa8cc',
-  text3:   '#4d6a8c',
+  text:    '#111827',
+  text2:   '#4b5563',
+  text3:   '#9ca3af',
 
-  accent:     '#3b82f6',
-  accent2:    '#60a5fa',
-  accentGlow: 'rgba(59,130,246,0.3)',
+  accent:     '#2563eb',
+  accent2:    '#1d4ed8',
+  accentGlow: 'rgba(37,99,235,0.25)',
 
-  green:    '#22c55e',
-  greenDim: 'rgba(34,197,94,0.15)',
-  red:      '#ef4444',
-  redDim:   'rgba(239,68,68,0.15)',
-  amber:    '#f59e0b',
+  green:    '#16a34a',
+  greenDim: 'rgba(22,163,74,0.12)',
+  red:      '#dc2626',
+  redDim:   'rgba(220,38,38,0.1)',
+  amber:    '#d97706',
 
   zones: {
-    colors: ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7'],
+    colors: ['#2563eb', '#16a34a', '#d97706', '#7c3aed'],
     dim:    [
-      'rgba(59,130,246,0.15)',
-      'rgba(34,197,94,0.15)',
-      'rgba(245,158,11,0.15)',
-      'rgba(168,85,247,0.15)',
+      'rgba(37,99,235,0.1)',
+      'rgba(22,163,74,0.1)',
+      'rgba(217,119,6,0.1)',
+      'rgba(124,58,237,0.1)',
     ],
   },
 

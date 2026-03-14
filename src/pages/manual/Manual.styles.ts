@@ -57,7 +57,7 @@ export const ZoneRow = styled.div<{ $active: boolean; $colorIndex: number }>`
   padding: 16px;
   background: ${({ $active, theme }) => $active ? theme.surface2 : theme.surface};
   border-radius: ${({ theme }) => theme.radius};
-  border: 1px solid ${({ $active }) => $active ? 'rgba(59,130,246,0.35)' : 'transparent'};
+  border: 1px solid ${({ $active, theme }) => $active ? 'rgba(59,130,246,0.35)' : theme.border};
   margin-bottom: 10px;
   position: relative;
   overflow: hidden;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgramCard } from '../../components/ProgramCard';
 import { useMQTT } from '../../hooks/useMQTT';
@@ -17,20 +17,21 @@ export function Programs() {
   const { connected, status, programs, lastAck } = useMQTT();
   const { setProgram, requestSync } = useIrrigation();
   const { showToast } = useToast();
+  const initialAck = useRef(lastAck);
 
-  // Reaccionar a acks
+  // Reaccionar a acks — ignora el ack que ya existía al montar
   useEffect(() => {
-    if (!lastAck) return;
+    if (!lastAck || lastAck === initialAck.current) return;
     if (!lastAck.ok) { showToast(lastAck.error ?? 'Error en el comando', 'error'); return; }
     if (lastAck.cmd === 'program') requestSync();
-  }, [lastAck, requestSync, showToast]);
+  }, [lastAck]);
 
   function handleToggle(id: number, enabled: boolean) {
     const prog = programs.find(p => p.id === id);
     if (!prog) return;
-    setProgram({ ...prog, days: [prog.days], enabled });
-    // Corregir: days debe ser array de índices
+
     const daysArr = [];
+    // Convertir el array de días a bitmask
     for (let i = 0; i <= 6; i++) if (prog.days & (1 << i)) daysArr.push(i);
     setProgram({ ...prog, days: daysArr, enabled });
   }
