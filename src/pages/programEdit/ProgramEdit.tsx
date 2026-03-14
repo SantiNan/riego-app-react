@@ -11,7 +11,7 @@ import {
   Wrapper, Header, HeaderTitle, BackBtn, SaveBtn, FormContent,
   Section, Row, Label, SectionLabel, Hint, TimeInput, DaysRow,
   DayBtn, ZonesGrid, ZoneItem, ZoneLabel, ZoneDot, Stepper,
-  StepBtn, StepVal, StepUnit, DeleteBtn,
+  StepBtn, StepInput, StepUnit, DeleteBtn,
 } from './ProgramEdit.styles';
 
 const DAY_LABELS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -129,7 +129,17 @@ export function ProgramEdit() {
                 </ZoneLabel>
                 <Stepper>
                   <StepBtn onClick={() => setZone(i, z - 1)}>−</StepBtn>
-                  <StepVal>{z}</StepVal>
+                  <StepInput
+                    type="text"
+                    inputMode="numeric"
+                    value={z || ''}
+                    placeholder="0"
+                    onChange={e => {
+                      const raw = e.target.value.replace(/\D/g, '');
+                      setZone(i, raw === '' ? 0 : parseInt(raw, 10));
+                    }}
+                    onBlur={() => setZone(i, zones[i])}
+                  />
                   <StepBtn onClick={() => setZone(i, z + 1)}>+</StepBtn>
                   <StepUnit>min</StepUnit>
                 </Stepper>

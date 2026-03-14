@@ -101,26 +101,28 @@ export const DayBtn = styled.button<{ $selected: boolean }>`
 `;
 
 export const ZonesGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 `;
 
 export const ZoneItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: ${({ theme }) => theme.surface};
   border: 1px solid ${({ theme }) => theme.border};
   border-radius: ${({ theme }) => theme.radiusSm};
-  padding: 12px;
+  padding: 14px 16px;
 `;
 
 export const ZoneLabel = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: ${({ theme }) => theme.text2};
+  gap: 8px;
+  font-size: 15px;
+  color: ${({ theme }) => theme.text};
   font-weight: 500;
-  margin-bottom: 10px;
 `;
 
 export const ZoneDot = styled.div<{ $color: string }>`
@@ -145,12 +147,19 @@ export const StepBtn = styled.button`
   &:active { background: ${({ theme }) => theme.surface2}; }
 `;
 
-export const StepVal = styled.span`
-  min-width: 28px;
+export const StepInput = styled.input`
+  width: 40px;
   text-align: center;
   font-family: ${({ theme }) => theme.fontMono};
   font-size: 18px;
   font-weight: 500;
+  color: ${({ theme }) => theme.text};
+  background: transparent;
+  border: none;
+  outline: none;
+  -moz-appearance: textfield;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 `;
 
 export const StepUnit = styled.span`font-size: 12px; color: ${({ theme }) => theme.text3};`;

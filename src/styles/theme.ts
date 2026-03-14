@@ -12,9 +12,9 @@ export const theme = {
   border:  'rgba(0,0,0,0.08)',
   border2: 'rgba(0,0,0,0.14)',
 
-  text:    '#111827',
-  text2:   '#4b5563',
-  text3:   '#9ca3af',
+  text:    '#0f172a',
+  text2:   '#374151',
+  text3:   '#6b7280',
 
   accent:     '#2563eb',
   accent2:    '#1d4ed8',

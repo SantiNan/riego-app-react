@@ -10,6 +10,14 @@ interface Props {
   onToggle: (id: number, enabled: boolean) => void;
 }
 
+function formatTime12(time: string): string {
+  const [hStr, m] = time.split(':');
+  let h = parseInt(hStr, 10);
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  return `${h}:${m} ${suffix}`;
+}
+
 export function ProgramCard({ program, status, onToggle }: Props) {
   const navigate  = useNavigate();
   const isActive  =
@@ -25,7 +33,7 @@ export function ProgramCard({ program, status, onToggle }: Props) {
     >
       {isActive && <ActiveBar />}
       <Left>
-        <Time $disabled={!program.enabled}>{program.start}</Time>
+        <Time $disabled={!program.enabled}>{formatTime12(program.start)}</Time>
         <Meta>
           <Days>{formatDays(program.days)}</Days>
           <ZoneDots>

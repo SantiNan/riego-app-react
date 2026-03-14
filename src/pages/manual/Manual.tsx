@@ -9,6 +9,7 @@ import {
   ZoneList, ZoneRow, ActiveBar, ZoneLeft, ZoneIcon, ZoneInfo,
   ZoneName, ZoneStatus, Footer, StopAllBtn,
 } from './Manual.styles';
+import { TabBar } from '../tabs/TabBar';
 
 const ZONE_COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7'];
 const ZONE_DIM    = ['rgba(59,130,246,0.15)','rgba(34,197,94,0.15)','rgba(245,158,11,0.15)','rgba(168,85,247,0.15)'];
@@ -79,16 +80,18 @@ export function Manual() {
         })}
       </ZoneList>
 
-      <Footer>
-        {activeZone != null && (
-          <StopAllBtn onClick={() => setConfirmStop(true)}>
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-              <rect x="5" y="5" width="14" height="14" rx="2"/>
-            </svg>
-            Apagar todo
-          </StopAllBtn>
-        )}
-      </Footer>
+      {activeZone != null && (
+        <Footer>
+            <StopAllBtn onClick={() => setConfirmStop(true)}>
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <rect x="5" y="5" width="14" height="14" rx="2"/>
+              </svg>
+              Apagar todo
+            </StopAllBtn>
+        </Footer>
+      )}
+
+      <TabBar />
 
       {confirmStop && (
         <ConfirmModal
