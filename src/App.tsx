@@ -5,10 +5,10 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import { MQTTProvider } from './hooks/useMQTT';
 import { ToastProvider } from './components/Toast';
 import { MiniPlayer } from './components/MiniPlayer';
-import { Home } from './pages/Home';
-import { Manual } from './pages/Manual';
-import { ProgramEdit } from './pages/ProgramEdit';
-import { Player } from './pages/Player';
+import { Programs } from './pages/programs/Programs';
+import { Manual } from './pages/manual/Manual';
+import { ProgramEdit } from './pages/programEdit/ProgramEdit';
+import { Player } from './pages/player/Player';
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
         <ToastProvider>
           <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Routes>
-              <Route path="/"              element={<Home />} />
+              <Route path="/"              element={<Programs />} />
               <Route path="/manual"        element={<Manual />} />
               <Route path="/program/:id"   element={<ProgramEdit />} />
               <Route path="/player"        element={<Player />} />
