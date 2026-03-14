@@ -25,6 +25,12 @@ export function useIrrigation() {
     publish(TOPICS.cmdManual, { action: 'off' });
   }
 
+  /** Detiene el riego programado en curso. */
+  function cancelProgram() {
+    if (!connected) return;
+    publish(TOPICS.cmdProgram, { action: 'stop' });
+  }
+
   // ── Pausa ───────────────────────────────────────────
 
   function pauseProgram() {
@@ -70,6 +76,7 @@ export function useIrrigation() {
   return {
     startManual,
     stopManual,
+    cancelProgram,
     togglePause,
     pauseProgram,
     resumeProgram,

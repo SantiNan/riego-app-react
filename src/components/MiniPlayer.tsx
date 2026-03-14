@@ -6,7 +6,7 @@ import { ZONE_NAMES } from '../lib/types';
 
 export function MiniPlayer() {
   const { status } = useMQTT();
-  const { togglePause, stopManual } = useIrrigation();
+  const { togglePause, stopManual, cancelProgram } = useIrrigation();
   const navigate = useNavigate();
 
   if (!status || status.mode === 'idle') return null;
@@ -53,7 +53,11 @@ export function MiniPlayer() {
             </ActionBtn>
           )}
           <StopBtn
-            onClick={e => { e.stopPropagation(); stopManual(); }}
+            onClick={e => {
+              e.stopPropagation();
+              if (isManual) stopManual();
+              else cancelProgram();
+            }}
             title="Detener"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
