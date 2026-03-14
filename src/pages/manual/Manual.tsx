@@ -17,7 +17,7 @@ const ZONE_DIM    = ['rgba(59,130,246,0.15)','rgba(34,197,94,0.15)','rgba(245,15
 
 export function Manual() {
   const navigate = useNavigate();
-  const { status } = useMQTT();
+  const { status, pending } = useMQTT();
   const { startManual, stopManual } = useIrrigation();
   const [confirmStop, setConfirmStop] = useState(false);
 
@@ -74,6 +74,7 @@ export function Manual() {
                 onChange={enabled => handleToggle(z, enabled)}
                 zoneColor={ZONE_COLORS[z - 1]}
                 zoneDim={ZONE_DIM[z - 1]}
+                disabled={pending}
                 onClick={e => e.stopPropagation()}
               />
             </ZoneRow>

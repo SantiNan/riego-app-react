@@ -5,15 +5,17 @@ interface ToggleProps {
   onChange: (checked: boolean) => void;
   zoneColor?: string;
   zoneDim?: string;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
 }
 
-export function Toggle({ checked, onChange, zoneColor, zoneDim, onClick }: ToggleProps) {
+export function Toggle({ checked, onChange, zoneColor, zoneDim, disabled, onClick }: ToggleProps) {
   return (
-    <Label onClick={onClick}>
+    <Label $disabled={disabled} onClick={onClick}>
       <Input
         type="checkbox"
         checked={checked}
+        disabled={disabled}
         onChange={e => onChange(e.target.checked)}
       />
       <Slider $checked={checked} $color={zoneColor} $dim={zoneDim} />
@@ -21,12 +23,15 @@ export function Toggle({ checked, onChange, zoneColor, zoneDim, onClick }: Toggl
   );
 }
 
-const Label = styled.label`
+const Label = styled.label<{ $disabled?: boolean }>`
   position: relative;
   display: inline-block;
   width: 52px;
   height: 30px;
   flex-shrink: 0;
+  pointer-events: ${({ $disabled }) => $disabled ? 'none' : 'auto'};
+  opacity: ${({ $disabled }) => $disabled ? 0.5 : 1};
+  transition: opacity 0.15s;
 `;
 
 const Input = styled.input`

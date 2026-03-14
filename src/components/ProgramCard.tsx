@@ -8,6 +8,7 @@ interface Props {
   program:  Program;
   status:   EspStatus | null;
   onToggle: (id: number, enabled: boolean) => void;
+  disabled?: boolean;
 }
 
 function formatTime12(time: string): string {
@@ -18,7 +19,7 @@ function formatTime12(time: string): string {
   return `${h}:${m} ${suffix}`;
 }
 
-export function ProgramCard({ program, status, onToggle }: Props) {
+export function ProgramCard({ program, status, onToggle, disabled }: Props) {
   const navigate  = useNavigate();
   const isActive  =
     status != null &&
@@ -53,6 +54,7 @@ export function ProgramCard({ program, status, onToggle }: Props) {
         <Toggle
           checked={program.enabled}
           onChange={enabled => onToggle(program.id, enabled)}
+          disabled={disabled}
           onClick={e => e.stopPropagation()}
         />
         <Chevron>

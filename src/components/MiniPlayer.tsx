@@ -5,7 +5,7 @@ import { useIrrigation } from '../hooks/useIrrigation';
 import { ZONE_NAMES } from '../lib/types';
 
 export function MiniPlayer() {
-  const { status } = useMQTT();
+  const { status, pending } = useMQTT();
   const { togglePause, stopManual, cancelProgram } = useIrrigation();
   const navigate = useNavigate();
 
@@ -43,7 +43,8 @@ export function MiniPlayer() {
         <Actions>
           {!isManual && (
             <ActionBtn
-              onClick={e => { e.stopPropagation(); togglePause(); }}
+              onClick={e => { e.stopPropagation(); if (!pending) togglePause(); }}
+              $disabled={pending}
               title={isPaused ? 'Reanudar' : 'Pausar'}
             >
               {isPaused
@@ -55,9 +56,11 @@ export function MiniPlayer() {
           <StopBtn
             onClick={e => {
               e.stopPropagation();
+              if (pending) return;
               if (isManual) stopManual();
               else cancelProgram();
             }}
+            $disabled={pending}
             title="Detener"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
@@ -140,7 +143,7 @@ const Actions = styled.div`
   gap: 4px;
 `;
 
-const ActionBtn = styled.button`
+const ActionBtn = styled.button<{ $disabled?: boolean }>`
   width: 38px; height: 38px;
   border-radius: 50%;
   background: rgba(255,255,255,0.2);
@@ -148,7 +151,9 @@ const ActionBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: background 0.15s, opacity 0.15s;
+  opacity: ${({ $disabled }) => $disabled ? 0.5 : 1};
+  pointer-events: ${({ $disabled }) => $disabled ? 'none' : 'auto'};
   &:active { background: rgba(255,255,255,0.3); }
 `;
 

@@ -23,10 +23,12 @@ import type { EspStatus, Program, AckMessage } from '../lib/types';
 interface MQTTContextValue {
   connected: boolean;
   synced:    boolean;
+  pending:   boolean;
   status:    EspStatus | null;
   programs:  Program[];
   lastAck:   AckMessage | null;
   publish:   (topic: string, payload: object) => void;
+  markPending: () => void;
 }
 
 // ── Context ──────────────────────────────────────────
@@ -42,9 +44,18 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
   const [programs,  setPrograms]  = useState<Program[]>([]);
   const [synced,    setSynced]    = useState(false);
   const [lastAck,   setLastAck]   = useState<AckMessage | null>(null);
+  const [pending,   setPending]   = useState(false);
+  const pendingTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const PENDING_TIMEOUT = 2000;
 
   const publish = useCallback((topic: string, payload: object) => {
     clientRef.current?.publish(topic, JSON.stringify(payload));
+  }, []);
+
+  const markPending = useCallback(() => {
+    setPending(true);
+    clearTimeout(pendingTimer.current);
+    pendingTimer.current = setTimeout(() => setPending(false), PENDING_TIMEOUT);
   }, []);
 
   useEffect(() => {
@@ -72,8 +83,8 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
     client.on('message', (topic, payload) => {
       try {
         const msg = JSON.parse(payload.toString());
-        if (topic === TOPICS.status)   setStatus(msg as EspStatus);
-        if (topic === TOPICS.programs) { setPrograms((msg as { programs: Program[] }).programs ?? []); setSynced(true); }
+        if (topic === TOPICS.status)   { setStatus(msg as EspStatus); setPending(false); clearTimeout(pendingTimer.current); }
+        if (topic === TOPICS.programs) { setPrograms((msg as { programs: Program[] }).programs ?? []); setPending(false); clearTimeout(pendingTimer.current); setSynced(true); }
         if (topic === TOPICS.ack)      setLastAck(msg as AckMessage);
       } catch { /* ignore malformed */ }
     });
@@ -92,7 +103,7 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
   }, [status]);
 
   return (
-    <MQTTContext.Provider value={{ connected, synced, status, programs, lastAck, publish }}>
+    <MQTTContext.Provider value={{ connected, synced, pending, status, programs, lastAck, publish, markPending }}>
       {children}
     </MQTTContext.Provider>
   );

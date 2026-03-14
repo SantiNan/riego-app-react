@@ -13,7 +13,7 @@ import {
 
 export function Programs() {
   const navigate = useNavigate();
-  const { connected, synced, status, programs, lastAck } = useMQTT();
+  const { connected, synced, pending, status, programs, lastAck } = useMQTT();
   const { setProgram, requestSync } = useIrrigation();
   const { showToast } = useToast();
   const initialAck = useRef(lastAck);
@@ -85,6 +85,7 @@ export function Programs() {
                 program={prog}
                 status={status}
                 onToggle={handleToggle}
+                disabled={pending}
               />
             ))
           )

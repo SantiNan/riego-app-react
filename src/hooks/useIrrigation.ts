@@ -9,25 +9,28 @@ import { useMQTT } from './useMQTT';
 import type { Program } from '../lib/types';
 
 export function useIrrigation() {
-  const { publish, connected, status } = useMQTT();
+  const { publish, connected, status, markPending } = useMQTT();
 
   // ── Manual ─────────────────────────────────────────
 
   /** Inicia riego manual sin límite de tiempo. */
   function startManual(zone: number) {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdManual, { action: 'on', zone });
   }
 
   /** Detiene el riego manual en curso. */
   function stopManual() {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdManual, { action: 'off' });
   }
 
   /** Detiene el riego programado en curso. */
   function cancelProgram() {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdProgram, { action: 'stop' });
   }
 
@@ -35,11 +38,13 @@ export function useIrrigation() {
 
   function pauseProgram() {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdPause, { action: 'pause' });
   }
 
   function resumeProgram() {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdPause, { action: 'resume' });
   }
 
@@ -53,6 +58,7 @@ export function useIrrigation() {
 
   function setProgram(prog: Omit<Program, 'days'> & { days: number[] }) {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdProgram, {
       action:  'set',
       id:      prog.id,
@@ -65,6 +71,7 @@ export function useIrrigation() {
 
   function deleteProgram(id: number) {
     if (!connected) return;
+    markPending();
     publish(TOPICS.cmdProgram, { action: 'delete', id });
   }
 
