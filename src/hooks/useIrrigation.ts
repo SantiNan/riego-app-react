@@ -9,25 +9,28 @@ import { useMQTT } from './useMQTT';
 import type { Program } from '../lib/types';
 
 export function useIrrigation() {
-  const { publish, connected, status } = useMQTT();
+  const { publish, connected, status, optimisticStatus, optimisticProgram } = useMQTT();
 
   // ── Manual ─────────────────────────────────────────
 
   /** Inicia riego manual sin límite de tiempo. */
   function startManual(zone: number) {
     if (!connected) return;
+    optimisticStatus({ mode: 'manual', zone, pump: true });
     publish(TOPICS.cmdManual, { action: 'on', zone });
   }
 
   /** Detiene el riego manual en curso. */
   function stopManual() {
     if (!connected) return;
+    optimisticStatus({ mode: 'idle', zone: undefined, pump: false });
     publish(TOPICS.cmdManual, { action: 'off' });
   }
 
   /** Detiene el riego programado en curso. */
   function cancelProgram() {
     if (!connected) return;
+    optimisticStatus({ mode: 'idle', zone: undefined, program: undefined, remaining: undefined, pump: false });
     publish(TOPICS.cmdProgram, { action: 'stop' });
   }
 
@@ -35,11 +38,13 @@ export function useIrrigation() {
 
   function pauseProgram() {
     if (!connected) return;
+    optimisticStatus({ mode: 'paused' });
     publish(TOPICS.cmdPause, { action: 'pause' });
   }
 
   function resumeProgram() {
     if (!connected) return;
+    optimisticStatus({ mode: 'program' });
     publish(TOPICS.cmdPause, { action: 'resume' });
   }
 

@@ -13,7 +13,7 @@ import {
 
 export function Programs() {
   const navigate = useNavigate();
-  const { connected, synced, status, programs, lastAck } = useMQTT();
+  const { connected, synced, status, programs, lastAck, optimisticProgram } = useMQTT();
   const { setProgram, requestSync } = useIrrigation();
   const { showToast } = useToast();
   const initialAck = useRef(lastAck);
@@ -29,6 +29,7 @@ export function Programs() {
     const prog = programs.find(p => p.id === id);
     if (!prog) return;
 
+    optimisticProgram(id, { enabled });
     const daysArr = [];
     // Convertir el array de días a bitmask
     for (let i = 0; i <= 6; i++) if (prog.days & (1 << i)) daysArr.push(i);

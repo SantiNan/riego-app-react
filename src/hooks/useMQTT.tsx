@@ -27,6 +27,8 @@ interface MQTTContextValue {
   programs:  Program[];
   lastAck:   AckMessage | null;
   publish:   (topic: string, payload: object) => void;
+  optimisticStatus:  (patch: Partial<EspStatus>) => void;
+  optimisticProgram: (id: number, patch: Partial<Program>) => void;
 }
 
 // ── Context ──────────────────────────────────────────
@@ -38,13 +40,36 @@ const MQTTContext = createContext<MQTTContextValue | null>(null);
 export function MQTTProvider({ children }: { children: ReactNode }) {
   const clientRef               = useRef<MqttClient | null>(null);
   const [connected, setConnected] = useState(false);
-  const [status,    setStatus]    = useState<EspStatus | null>(null);
-  const [programs,  setPrograms]  = useState<Program[]>([]);
+  const [realStatus,    setRealStatus]    = useState<EspStatus | null>(null);
+  const [realPrograms,  setRealPrograms]  = useState<Program[]>([]);
   const [synced,    setSynced]    = useState(false);
   const [lastAck,   setLastAck]   = useState<AckMessage | null>(null);
 
+  // Optimistic overlays — se superponen al estado real sin bloquearlo
+  const [statusPatch, setStatusPatch]   = useState<Partial<EspStatus> | null>(null);
+  const [progPatches, setProgPatches]   = useState<Record<number, Partial<Program>>>({});
+  const statusPatchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const progPatchTimer   = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const OPTIMISTIC_TIMEOUT = 2000;
+
+  // Estado expuesto: real + overlay
+  const status   = realStatus && statusPatch ? { ...realStatus, ...statusPatch } : realStatus;
+  const programs = realPrograms.map(p => progPatches[p.id] ? { ...p, ...progPatches[p.id] } : p);
+
   const publish = useCallback((topic: string, payload: object) => {
     clientRef.current?.publish(topic, JSON.stringify(payload));
+  }, []);
+
+  const optimisticStatus = useCallback((patch: Partial<EspStatus>) => {
+    setStatusPatch(patch);
+    clearTimeout(statusPatchTimer.current);
+    statusPatchTimer.current = setTimeout(() => setStatusPatch(null), OPTIMISTIC_TIMEOUT);
+  }, []);
+
+  const optimisticProgram = useCallback((id: number, patch: Partial<Program>) => {
+    setProgPatches(prev => ({ ...prev, [id]: patch }));
+    clearTimeout(progPatchTimer.current);
+    progPatchTimer.current = setTimeout(() => setProgPatches({}), OPTIMISTIC_TIMEOUT);
   }, []);
 
   useEffect(() => {
@@ -72,9 +97,37 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
     client.on('message', (topic, payload) => {
       try {
         const msg = JSON.parse(payload.toString());
-        if (topic === TOPICS.status)   setStatus(msg as EspStatus);
-        if (topic === TOPICS.programs) { setPrograms((msg as { programs: Program[] }).programs ?? []); setSynced(true); }
-        if (topic === TOPICS.ack)      setLastAck(msg as AckMessage);
+        if (topic === TOPICS.status) {
+          const incoming = msg as EspStatus;
+          setRealStatus(incoming);
+          // Limpiar overlay solo si el estado real ya refleja lo esperado
+          setStatusPatch(prev => {
+            if (!prev) return null;
+            const matches = Object.keys(prev).every(
+              k => incoming[k as keyof EspStatus] === prev[k as keyof EspStatus]
+            );
+            return matches ? null : prev;
+          });
+        }
+        if (topic === TOPICS.programs) {
+          const incoming = (msg as { programs: Program[] }).programs ?? [];
+          setRealPrograms(incoming);
+          // Limpiar overlays de programas confirmados
+          setProgPatches(prev => {
+            const next: Record<number, Partial<Program>> = {};
+            for (const [id, patch] of Object.entries(prev)) {
+              const real = incoming.find(p => p.id === Number(id));
+              if (!real) continue;
+              const matches = Object.keys(patch).every(
+                k => real[k as keyof Program] === patch[k as keyof Program]
+              );
+              if (!matches) next[Number(id)] = patch;
+            }
+            return Object.keys(next).length ? next : {};
+          });
+          setSynced(true);
+        }
+        if (topic === TOPICS.ack) setLastAck(msg as AckMessage);
       } catch { /* ignore malformed */ }
     });
 
@@ -83,16 +136,16 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
 
   // Watchdog offline: si el timestamp del status es muy viejo → desconectado
   useEffect(() => {
-    if (!status) return;
+    if (!realStatus) return;
     const check = setInterval(() => {
-      const age = Math.floor(Date.now() / 1000) - status.timestamp;
+      const age = Math.floor(Date.now() / 1000) - realStatus.timestamp;
       if (age > OFFLINE_TIMEOUT_S) setConnected(false);
     }, 15_000);
     return () => clearInterval(check);
-  }, [status]);
+  }, [realStatus]);
 
   return (
-    <MQTTContext.Provider value={{ connected, synced, status, programs, lastAck, publish }}>
+    <MQTTContext.Provider value={{ connected, synced, status, programs, lastAck, publish, optimisticStatus, optimisticProgram }}>
       {children}
     </MQTTContext.Provider>
   );
