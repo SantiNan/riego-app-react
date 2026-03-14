@@ -40,7 +40,7 @@ export const FormContent = styled.div`
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
 `;
 
 export const Section = styled.div`
@@ -70,7 +70,7 @@ export const Hint = styled.span`
 
 export const TimeInput = styled.input`
   font-family: ${({ theme }) => theme.fontMono};
-  font-size: 52px;
+  font-size: 40px;
   font-weight: 500;
   color: ${({ theme }) => theme.text};
   background: transparent;
@@ -79,7 +79,6 @@ export const TimeInput = styled.input`
   width: 100%;
   text-align: center;
   letter-spacing: -2px;
-  padding: 8px 0;
   -webkit-appearance: none;
   &::-webkit-calendar-picker-indicator { display: none; }
 `;

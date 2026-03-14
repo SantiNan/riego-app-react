@@ -7,7 +7,7 @@ import { useState } from 'react';
 import {
   Wrapper, Header, BackBtn, HeaderTitle, Spacer, Warning,
   ZoneList, ZoneRow, ActiveBar, ZoneLeft, ZoneIcon, ZoneInfo,
-  ZoneName, ZoneStatus, Footer, StopAllBtn,
+  ZoneName, ZoneStatus,
 } from './Manual.styles';
 import { TabBar } from '../tabs/TabBar';
 import { ZONE_NAMES } from '../../lib/types';
@@ -80,17 +80,6 @@ export function Manual() {
           );
         })}
       </ZoneList>
-
-      {activeZone != null && (
-        <Footer>
-            <StopAllBtn onClick={() => setConfirmStop(true)}>
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                <rect x="5" y="5" width="14" height="14" rx="2"/>
-              </svg>
-              Apagar todo
-            </StopAllBtn>
-        </Footer>
-      )}
 
       <TabBar />
 

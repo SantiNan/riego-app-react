@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import styled, { keyframes, css } from 'styled-components';
 import { useMQTT } from '../hooks/useMQTT';
 import { useIrrigation } from '../hooks/useIrrigation';
+import { ZONE_NAMES } from '../lib/types';
 
 export function MiniPlayer() {
   const { status } = useMQTT();
@@ -14,10 +15,10 @@ export function MiniPlayer() {
   const isManual  = status.mode === 'manual';
 
   const title = isManual
-    ? `Riego manual — Zona ${status.zone}`
+    ? `Riego manual — ${ZONE_NAMES[status.zone! - 1]}`
     : isPaused
-      ? `Pausado — Zona ${status.zone}`
-      : `Programa ${status.program} — Zona ${status.zone}`;
+      ? `Pausado — ${ZONE_NAMES[status.zone! - 1]}`
+      : `Programa ${status.program} — ${ZONE_NAMES[status.zone! - 1]}`;
 
   const sub = !isManual && status.remaining != null
     ? `${status.remaining} min restante${status.remaining !== 1 ? 's' : ''}`
@@ -29,8 +30,7 @@ export function MiniPlayer() {
   }
 
   return (
-    <Wrapper>
-      <Inner onClick={handleExpand}>
+    <Wrapper onClick={handleExpand}>
         <Info>
           <Bars $paused={isPaused}>
             <span /><span /><span /><span />
@@ -61,7 +61,6 @@ export function MiniPlayer() {
             </svg>
           </StopBtn>
         </Actions>
-      </Inner>
     </Wrapper>
   );
 }
@@ -72,27 +71,14 @@ const soundwave = keyframes`
 `;
 
 const Wrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0; right: 0;
-  z-index: 100;
-  padding: 8px 12px;
-  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-`;
-
-const Inner = styled.div`
-  background: ${({ theme }) => theme.surface2};
-  border: 1px solid ${({ theme }) => theme.border2};
-  border-radius: ${({ theme }) => theme.radius};
-  backdrop-filter: blur(20px);
+  background: ${({ theme }) => theme.surface};
+  border-top: 1px solid ${({ theme }) => theme.border};
   display: flex;
   align-items: center;
-  padding: 12px 14px;
+  padding: 10px 14px;
   gap: 12px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.15);
   cursor: pointer;
-  transition: transform 0.12s;
-  &:active { transform: scale(0.98); }
+  &:active { background: ${({ theme }) => theme.surface2}; }
 `;
 
 const Info = styled.div`

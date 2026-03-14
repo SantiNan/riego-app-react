@@ -47,6 +47,7 @@ export const ZoneList = styled.div`
   flex: 1;
   overflow-y: auto;
   padding: 12px 16px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   -webkit-overflow-scrolling: touch;
 `;
 
@@ -102,30 +103,4 @@ export const ZoneStatus = styled.span<{ $active: boolean }>`
   font-size: 13px;
   color: ${({ $active, theme }) => $active ? theme.accent2 : theme.text3};
   transition: color 0.2s;
-`;
-
-export const Footer = styled.div`
-  padding: 12px 16px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid ${({ theme }) => theme.border};
-  min-height: 72px;
-  display: flex;
-  align-items: center;
-`;
-
-export const StopAllBtn = styled.button`
-  width: 100%;
-  height: 48px;
-  border-radius: ${({ theme }) => theme.radius};
-  border: 1px solid rgba(239,68,68,0.3);
-  background: ${({ theme }) => theme.redDim};
-  color: ${({ theme }) => theme.red};
-  font-size: 15px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background 0.15s;
-  &:active { background: rgba(239,68,68,0.25); }
 `;

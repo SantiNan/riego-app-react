@@ -26,7 +26,7 @@ export const Content = styled.div`
   width: 100%;
   padding: 24px 28px;
   padding-top: 60px;
-  padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;

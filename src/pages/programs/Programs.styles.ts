@@ -56,7 +56,7 @@ export const Content = styled.div`
   flex: 1;
   overflow-y: auto;
   padding: 12px 16px;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   -webkit-overflow-scrolling: touch;
 `;
 

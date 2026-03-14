@@ -5,7 +5,6 @@ import { useMQTT } from '../../hooks/useMQTT';
 import { useIrrigation } from '../../hooks/useIrrigation';
 import { useToast } from '../../components/Toast';
 import { sortByTime } from '../../lib/programs';
-import { TabBar } from '../tabs/TabBar';
 import {
   Wrapper, Header, HeaderLeft, HeaderRight, StatusDot,
   HeaderTitle, IconBtn, Content, EmptyState, EmptyIcon,
@@ -91,8 +90,6 @@ export function Programs() {
           )
         )}
       </Content>
-
-      <TabBar />
     </Wrapper>
   );
 }

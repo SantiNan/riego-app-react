@@ -1,14 +1,21 @@
 import styled from 'styled-components';
 
+export const BottomBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  background: ${({ theme }) => theme.bg};
+  padding-bottom: env(safe-area-inset-bottom, 0);
+`;
+
 export const TabBarWrapper = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-around;
   height: 56px;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  background: ${({ theme }) => theme.bg};
   border-top: 1px solid ${({ theme }) => theme.border};
-  flex-shrink: 0;
 `;
 
 export const TabItem = styled.button<{ $active: boolean }>`
