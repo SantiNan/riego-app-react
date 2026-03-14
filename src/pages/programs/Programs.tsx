@@ -42,7 +42,7 @@ export function Programs() {
       <Header>
         <HeaderLeft>
           <StatusDot $online={connected} />
-          <HeaderTitle>Riego Basquade</HeaderTitle>
+          <HeaderTitle>RIEGO BASQUADE</HeaderTitle>
         </HeaderLeft>
         <HeaderRight>
           <IconBtn onClick={() => navigate('/program/new')} title="Nuevo programa">

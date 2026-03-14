@@ -78,7 +78,7 @@ export function ProgramEdit() {
             <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
           </svg>
         </BackBtn>
-        <HeaderTitle>{isNew ? 'Nuevo programa' : 'Editar programa'}</HeaderTitle>
+        <HeaderTitle>{isNew ? 'NUEVO PROGRAMA' : 'EDITAR PROGRAMA'}</HeaderTitle>
         <SaveBtn onClick={handleSave}>Guardar</SaveBtn>
       </Header>
 
@@ -130,7 +130,7 @@ export function ProgramEdit() {
                   {ZONE_NAMES[i]}
                 </ZoneLabel>
                 <Stepper>
-                  <StepBtn onClick={() => setZone(i, z - 1)}>−</StepBtn>
+                  <StepBtn disabled={z <= 0} onClick={() => setZone(i, z - 1)}>−</StepBtn>
                   <StepInput
                     type="text"
                     inputMode="numeric"
@@ -142,7 +142,7 @@ export function ProgramEdit() {
                     }}
                     onBlur={() => setZone(i, zones[i])}
                   />
-                  <StepBtn onClick={() => setZone(i, z + 1)}>+</StepBtn>
+                  <StepBtn disabled={z >= MAX_DURATION} onClick={() => setZone(i, z + 1)}>+</StepBtn>
                   <StepUnit>min</StepUnit>
                 </Stepper>
               </ZoneItem>

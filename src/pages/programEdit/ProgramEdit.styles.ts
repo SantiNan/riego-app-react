@@ -70,7 +70,7 @@ export const Hint = styled.span`
 
 export const TimeInput = styled.input`
   font-family: ${({ theme }) => theme.fontMono};
-  font-size: 40px;
+  font-size: 35px;
   font-weight: 500;
   color: ${({ theme }) => theme.text};
   background: transparent;
@@ -142,8 +142,9 @@ export const StepBtn = styled.button`
   font-size: 18px;
   display: flex; align-items: center; justify-content: center;
   line-height: 1;
-  transition: background 0.12s;
+  transition: background 0.12s, opacity 0.12s;
   &:active { background: ${({ theme }) => theme.surface2}; }
+  &:disabled { opacity: 0.3; pointer-events: none; }
 `;
 
 export const StepInput = styled.input`

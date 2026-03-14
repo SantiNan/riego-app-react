@@ -22,7 +22,7 @@ export const TOPICS = {
 
 export const MAX_PROGRAMS   = 32;
 export const MAX_ZONES      = 4;
-export const MAX_DURATION   = 255;
+export const MAX_DURATION   = 60;
 export const OFFLINE_TIMEOUT_S = 90;
 
 export const ZONE_COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7'] as const;
