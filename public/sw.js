@@ -1,7 +1,7 @@
 const CACHE_NAME = 'riego-v1';
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
+  './',
+  './index.html',
 ];
 
 self.addEventListener('install', (event) => {
@@ -45,7 +45,7 @@ self.addEventListener('fetch', (event) => {
         return caches.match(request).then((cached) => {
           if (cached) return cached;
           // Fallback a index.html para navegación SPA
-          if (request.mode === 'navigate') return caches.match('/index.html');
+          if (request.mode === 'navigate') return caches.match('./index.html');
           return new Response('Offline', { status: 503 });
         });
       })
