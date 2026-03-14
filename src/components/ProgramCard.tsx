@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Toggle } from './Toggle';
 import { formatDays } from '../lib/programs';
-import type { Program, EspStatus } from '../lib/types';
+import { ZONE_NAMES, type Program, type EspStatus } from '../lib/types';
 
 interface Props {
   program:  Program;
@@ -42,6 +42,12 @@ export function ProgramCard({ program, status, onToggle }: Props) {
             ))}
           </ZoneDots>
         </Meta>
+        {isActive && (
+          <ActiveBadge>
+            {status!.mode === 'paused' ? 'Pausado' : 'Regando'} — {ZONE_NAMES[(status!.zone ?? 1) - 1]}
+            {status!.remaining != null && ` · ${status!.remaining} min`}
+          </ActiveBadge>
+        )}
       </Left>
       <Right>
         <Toggle
@@ -66,9 +72,9 @@ const Card = styled.div<{ $disabled: boolean; $active: boolean }>`
   align-items: center;
   gap: 14px;
   padding: 16px;
-  background: ${({ theme }) => theme.surface};
+  background: ${({ $active, theme }) => $active ? theme.accentGlow : theme.surface};
   border-radius: ${({ theme }) => theme.radius};
-  border: 1px solid ${({ $active, theme }) => $active ? 'rgba(59,130,246,0.3)' : theme.border};
+  border: 1px solid ${({ $active, theme }) => $active ? theme.accent : theme.border};
   cursor: pointer;
   margin-bottom: 10px;
   position: relative;
@@ -81,8 +87,8 @@ const Card = styled.div<{ $disabled: boolean; $active: boolean }>`
 const ActiveBar = styled.div`
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, ${({ theme }) => theme.accent}, #22c55e);
+  width: 4px;
+  background: ${({ theme }) => theme.accent};
 `;
 
 const Left = styled.div`flex: 1; min-width: 0;`;
@@ -127,6 +133,14 @@ const Right = styled.div`
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+`;
+
+const ActiveBadge = styled.span`
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.accent};
 `;
 
 const Chevron = styled.div`

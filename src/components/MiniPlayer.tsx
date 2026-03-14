@@ -17,8 +17,8 @@ export function MiniPlayer() {
   const title = isManual
     ? `Riego manual — ${ZONE_NAMES[status.zone! - 1]}`
     : isPaused
-      ? `Pausado — ${ZONE_NAMES[status.zone! - 1]}`
-      : `Programa ${status.program} — ${ZONE_NAMES[status.zone! - 1]}`;
+      ? `Riego pausado — ${ZONE_NAMES[status.zone! - 1]}`
+      : `Riego programado — ${ZONE_NAMES[status.zone! - 1]}`;
 
   const sub = !isManual && status.remaining != null
     ? `${status.remaining} min restante${status.remaining !== 1 ? 's' : ''}`
@@ -71,14 +71,13 @@ const soundwave = keyframes`
 `;
 
 const Wrapper = styled.div`
-  background: ${({ theme }) => theme.surface};
-  border-top: 1px solid ${({ theme }) => theme.border};
+  background: ${({ theme }) => theme.accent};
   display: flex;
   align-items: center;
   padding: 10px 14px;
   gap: 12px;
   cursor: pointer;
-  &:active { background: ${({ theme }) => theme.surface2}; }
+  -webkit-tap-highlight-color: transparent;
 `;
 
 const Info = styled.div`
@@ -100,7 +99,7 @@ const Bars = styled.div<{ $paused: boolean }>`
     display: block;
     width: 3px;
     border-radius: 2px;
-    background: ${({ theme }) => theme.accent2};
+    background: rgba(255,255,255,0.9);
     animation: ${({ $paused }) => $paused ? 'none' : css`${soundwave} 0.8s ease-in-out infinite`};
     opacity: ${({ $paused }) => $paused ? 0.4 : 1};
   }
@@ -118,7 +117,7 @@ const Text = styled.div`
 const Title = styled.span`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ theme }) => theme.text};
+  color: #ffffff;
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -127,7 +126,7 @@ const Title = styled.span`
 
 const Sub = styled.span`
   font-size: 12px;
-  color: ${({ theme }) => theme.text2};
+  color: rgba(255,255,255,0.7);
   display: block;
 `;
 
@@ -140,17 +139,17 @@ const Actions = styled.div`
 const ActionBtn = styled.button`
   width: 38px; height: 38px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  color: ${({ theme }) => theme.text};
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.15s;
-  &:active { background: rgba(255,255,255,0.15); }
+  &:active { background: rgba(255,255,255,0.3); }
 `;
 
 const StopBtn = styled(ActionBtn)`
-  background: ${({ theme }) => theme.redDim};
-  color: ${({ theme }) => theme.red};
-  &:active { background: rgba(239,68,68,0.25); }
+  background: rgba(255,255,255,0.15);
+  color: #ffffff;
+  &:active { background: rgba(255,255,255,0.25); }
 `;
