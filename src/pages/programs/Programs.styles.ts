@@ -1,4 +1,9 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
 
 export const Wrapper = styled.div`
   display: flex;
@@ -68,6 +73,10 @@ export const EmptyState = styled.div`
 export const EmptyIcon = styled.div`
   color: ${({ theme }) => theme.text3};
   svg { width: 64px; height: 64px; }
+`;
+
+export const Spinner = styled.svg`
+  animation: ${spin} 1s linear infinite;
 `;
 
 export const EmptyTitle = styled.p`

@@ -13,6 +13,7 @@ import {
   DayBtn, ZonesGrid, ZoneItem, ZoneLabel, ZoneDot, Stepper,
   StepBtn, StepInput, StepUnit, DeleteBtn,
 } from './ProgramEdit.styles';
+import { ZONE_NAMES } from '../../lib/types';
 
 const DAY_LABELS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const DAY_INDICES = [1, 2, 3, 4, 5, 6, 0]; // orden visual L→D
@@ -92,6 +93,7 @@ export function ProgramEdit() {
 
         {/* Hora */}
         <Section>
+          <SectionLabel>Hora de inicio</SectionLabel>
           <TimeInput
             type="time"
             value={start}
@@ -125,7 +127,7 @@ export function ProgramEdit() {
               <ZoneItem key={i}>
                 <ZoneLabel>
                   <ZoneDot $color={ZONE_COLORS[i]} />
-                  Zona {i + 1}
+                  {ZONE_NAMES[i]}
                 </ZoneLabel>
                 <Stepper>
                   <StepBtn onClick={() => setZone(i, z - 1)}>−</StepBtn>

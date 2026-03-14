@@ -9,12 +9,12 @@ import { TabBar } from '../tabs/TabBar';
 import {
   Wrapper, Header, HeaderLeft, HeaderRight, StatusDot,
   HeaderTitle, IconBtn, Content, EmptyState, EmptyIcon,
-  EmptyTitle, EmptySub,
+  EmptyTitle, EmptySub, Spinner,
 } from './Programs.styles';
 
 export function Programs() {
   const navigate = useNavigate();
-  const { connected, status, programs, lastAck } = useMQTT();
+  const { connected, synced, status, programs, lastAck } = useMQTT();
   const { setProgram, requestSync } = useIrrigation();
   const { showToast } = useToast();
   const initialAck = useRef(lastAck);
@@ -43,7 +43,7 @@ export function Programs() {
       <Header>
         <HeaderLeft>
           <StatusDot $online={connected} />
-          <HeaderTitle>Riego</HeaderTitle>
+          <HeaderTitle>Riego Basquade</HeaderTitle>
         </HeaderLeft>
         <HeaderRight>
           <IconBtn onClick={() => navigate('/program/new')} title="Nuevo programa">
@@ -56,27 +56,39 @@ export function Programs() {
       </Header>
 
       <Content>
-        {sorted.length === 0 ? (
+        {(!connected || !synced) ? (
           <EmptyState>
             <EmptyIcon>
-              <svg viewBox="0 0 64 64" fill="none">
-                <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
-                <path d="M20 36c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
-                <path d="M32 24v-8M28 20l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
-              </svg>
+              <Spinner viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="2.5" opacity="0.15"/>
+                <path d="M32 4a28 28 0 0 1 28 28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+              </Spinner>
             </EmptyIcon>
-            <EmptyTitle>Sin programas</EmptyTitle>
-            <EmptySub>Tocá <strong>+</strong> para crear tu primer programa de riego</EmptySub>
+            <EmptyTitle>Conectando...</EmptyTitle>
           </EmptyState>
         ) : (
-          sorted.map(prog => (
-            <ProgramCard
-              key={prog.id}
-              program={prog}
-              status={status}
-              onToggle={handleToggle}
-            />
-          ))
+          sorted.length === 0 ? (
+            <EmptyState>
+              <EmptyIcon>
+                <svg viewBox="0 0 64 64" fill="none">
+                  <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
+                  <path d="M20 36c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                  <path d="M32 24v-8M28 20l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.7"/>
+                </svg>
+              </EmptyIcon>
+              <EmptyTitle>Sin programas</EmptyTitle>
+              <EmptySub>Tocá <strong>+</strong> para crear tu primer programa de riego</EmptySub>
+            </EmptyState>
+          ) : (
+            sorted.map(prog => (
+              <ProgramCard
+                key={prog.id}
+                program={prog}
+                status={status}
+                onToggle={handleToggle}
+              />
+            ))
+          )
         )}
       </Content>
 

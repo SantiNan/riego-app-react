@@ -22,6 +22,7 @@ import type { EspStatus, Program, AckMessage } from '../lib/types';
 
 interface MQTTContextValue {
   connected: boolean;
+  synced:    boolean;
   status:    EspStatus | null;
   programs:  Program[];
   lastAck:   AckMessage | null;
@@ -39,6 +40,7 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
   const [connected, setConnected] = useState(false);
   const [status,    setStatus]    = useState<EspStatus | null>(null);
   const [programs,  setPrograms]  = useState<Program[]>([]);
+  const [synced,    setSynced]    = useState(false);
   const [lastAck,   setLastAck]   = useState<AckMessage | null>(null);
 
   const publish = useCallback((topic: string, payload: object) => {
@@ -71,7 +73,7 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
       try {
         const msg = JSON.parse(payload.toString());
         if (topic === TOPICS.status)   setStatus(msg as EspStatus);
-        if (topic === TOPICS.programs) setPrograms((msg as { programs: Program[] }).programs ?? []);
+        if (topic === TOPICS.programs) { setPrograms((msg as { programs: Program[] }).programs ?? []); setSynced(true); }
         if (topic === TOPICS.ack)      setLastAck(msg as AckMessage);
       } catch { /* ignore malformed */ }
     });
@@ -90,7 +92,7 @@ export function MQTTProvider({ children }: { children: ReactNode }) {
   }, [status]);
 
   return (
-    <MQTTContext.Provider value={{ connected, status, programs, lastAck, publish }}>
+    <MQTTContext.Provider value={{ connected, synced, status, programs, lastAck, publish }}>
       {children}
     </MQTTContext.Provider>
   );

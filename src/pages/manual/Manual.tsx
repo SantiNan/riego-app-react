@@ -10,6 +10,7 @@ import {
   ZoneName, ZoneStatus, Footer, StopAllBtn,
 } from './Manual.styles';
 import { TabBar } from '../tabs/TabBar';
+import { ZONE_NAMES } from '../../lib/types';
 
 const ZONE_COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7'];
 const ZONE_DIM    = ['rgba(59,130,246,0.15)','rgba(34,197,94,0.15)','rgba(245,158,11,0.15)','rgba(168,85,247,0.15)'];
@@ -62,7 +63,7 @@ export function Manual() {
               <ZoneLeft>
                 <ZoneIcon $color={ZONE_COLORS[z - 1]} $dim={ZONE_DIM[z - 1]} $active={isActive} />
                 <ZoneInfo>
-                  <ZoneName>Zona {z}</ZoneName>
+                  <ZoneName>{ZONE_NAMES[z - 1]}</ZoneName>
                   <ZoneStatus $active={isActive}>
                     {isActive ? 'Regando' : 'Apagada'}
                   </ZoneStatus>

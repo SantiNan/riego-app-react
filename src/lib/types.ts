@@ -34,6 +34,14 @@ export interface AckMessage {
   error?:  string;
 }
 
+/** Nombres de las 4 zonas, indexados por posición (0-3) */
+export const ZONE_NAMES: readonly [string, string, string, string] = [
+  'Fondo', // o 'Zona 1'
+  'Centro',// o 'Zona 2'
+  'Frente',// o 'Zona 3'
+  'Vereda',// o 'Zona 4'
+];
+
 /** Datos del formulario de programa (antes de enviar al ESP) */
 export interface ProgramFormData {
   id:      number;   // -1 si es nuevo
