@@ -1,11 +1,11 @@
 {
-  "name": "Sistema de Riego",
+  "name": "Riego Basquade",
   "short_name": "Riego",
   "description": "Control de riego automático ESP8266",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a1628",
-  "theme_color": "#0a1628",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "orientation": "portrait",
   "icons": [
     {
