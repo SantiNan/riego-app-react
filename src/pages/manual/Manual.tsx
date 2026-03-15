@@ -41,7 +41,7 @@ export function Manual() {
             <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
           </svg>
         </BackBtn>
-        <HeaderTitle>Riego manual</HeaderTitle>
+        <HeaderTitle>RIEGO MANUAL</HeaderTitle>
         <Spacer />
       </Header>
 

@@ -19,6 +19,7 @@ export const TabBarWrapper = styled.nav`
 `;
 
 export const TabItem = styled.button<{ $active: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,4 +35,15 @@ export const TabItem = styled.button<{ $active: boolean }>`
 export const TabLabel = styled.span`
   font-size: 11px;
   font-weight: 500;
+`;
+
+export const StatusDot = styled.div<{ $online: boolean }>`
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  right: calc(50% - 25px);
+  background: ${({ $online, theme }) => $online ? theme.green : theme.text3};
+  box-shadow: ${({ $online, theme }) => $online ? `0 0 6px ${theme.green}` : 'none'};
+  transition: background 0.3s;
 `;

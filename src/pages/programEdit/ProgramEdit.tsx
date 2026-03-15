@@ -34,7 +34,26 @@ export function ProgramEdit() {
   const [days,     setDays]     = useState<number[]>(prog ? decodeDays(prog.days) : []);
   const [zones,    setZones]    = useState<[number,number,number,number]>(prog?.zones ?? [0,0,0,0]);
   const [showDel,  setShowDel]  = useState(false);
+  const [showBack, setShowBack] = useState(false);
   const initialAck = useRef(lastAck);
+
+  const initEnabled = useRef(prog?.enabled ?? true);
+  const initStart   = useRef(prog?.start   ?? '07:00');
+  const initDays    = useRef<number[]>(prog ? decodeDays(prog.days) : []);
+  const initZones   = useRef<[number,number,number,number]>(prog?.zones ?? [0,0,0,0]);
+
+  function hasChanges() {
+    if (enabled !== initEnabled.current) return true;
+    if (start !== initStart.current) return true;
+    if (days.length !== initDays.current.length || days.some(d => !initDays.current.includes(d))) return true;
+    if (zones.some((z, i) => z !== initZones.current[i])) return true;
+    return false;
+  }
+
+  function handleBack() {
+    if (hasChanges()) { setShowBack(true); return; }
+    navigate(-1);
+  }
 
   // Ack handler — ignora el ack que ya existía al montar
   useEffect(() => {
@@ -73,13 +92,12 @@ export function ProgramEdit() {
   return (
     <Wrapper>
       <Header>
-        <BackBtn onClick={() => navigate(-1)}>
+        <BackBtn onClick={handleBack}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M19 12H5M5 12l7-7M5 12l7 7"/>
           </svg>
         </BackBtn>
         <HeaderTitle>{isNew ? 'NUEVO PROGRAMA' : 'EDITAR PROGRAMA'}</HeaderTitle>
-        <SaveBtn onClick={handleSave}>Guardar</SaveBtn>
       </Header>
 
       <FormContent>
@@ -150,6 +168,11 @@ export function ProgramEdit() {
           </ZonesGrid>
         </Section>
 
+        {/* Guardar */}
+        <Section>
+          <SaveBtn onClick={handleSave}>Guardar</SaveBtn>
+        </Section>
+
         {/* Eliminar */}
         {!isNew && (
           <Section>
@@ -157,6 +180,16 @@ export function ProgramEdit() {
           </Section>
         )}
       </FormContent>
+
+      {showBack && (
+        <ConfirmModal
+          title="¿Salir sin guardar?"
+          body="Tenés cambios sin guardar que se perderán."
+          confirmLabel="Salir"
+          onConfirm={() => { setShowBack(false); navigate(-1); }}
+          onCancel={() => setShowBack(false)}
+        />
+      )}
 
       {showDel && (
         <ConfirmModal

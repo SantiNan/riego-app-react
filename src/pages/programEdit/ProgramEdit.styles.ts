@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`display: flex; flex-direction: column; height: 100%;`;
 
 export const Header = styled.header`
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   height: 60px;
   padding: 0 16px;
   padding-top: env(safe-area-inset-top, 0);
@@ -14,7 +14,14 @@ export const Header = styled.header`
   flex-shrink: 0;
 `;
 
-export const HeaderTitle = styled.span`font-size: 18px; font-weight: 600; letter-spacing: -0.3px;`;
+export const HeaderTitle = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+`;
 
 export const BackBtn = styled.button`
   width: 40px; height: 40px;
@@ -25,12 +32,12 @@ export const BackBtn = styled.button`
 `;
 
 export const SaveBtn = styled.button`
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 20px;
+  width: 100%;
+  height: 48px;
+  border-radius: ${({ theme }) => theme.radiusSm};
   background: ${({ theme }) => theme.accent};
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   transition: opacity 0.15s;
   &:active { opacity: 0.75; }

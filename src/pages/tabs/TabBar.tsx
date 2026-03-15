@@ -1,10 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MiniPlayer } from '../../components/MiniPlayer';
-import { BottomBar, TabBarWrapper, TabItem, TabLabel } from './TabBar.styles';
+import { useMQTT } from '../../hooks/useMQTT';
+import { BottomBar, TabBarWrapper, TabItem, TabLabel, StatusDot } from './TabBar.styles';
 
 export function TabBar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { connected } = useMQTT();
 
   return (
     <BottomBar>
@@ -18,6 +20,7 @@ export function TabBar() {
             <line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
           <TabLabel>Programas</TabLabel>
+          <StatusDot $online={connected} />
         </TabItem>
         <TabItem $active={pathname === '/manual'} onClick={() => navigate('/manual')}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

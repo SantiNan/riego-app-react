@@ -12,6 +12,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Header = styled.header`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,17 +25,12 @@ export const Header = styled.header`
 `;
 
 export const HeaderLeft = styled.div`display: flex; align-items: center; gap: 8px;`;
-export const HeaderRight = styled.div`display: flex; align-items: center; gap: 4px;`;
-
-export const StatusDot = styled.div<{ $online: boolean }>`
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: ${({ $online, theme }) => $online ? theme.green : theme.text3};
-  box-shadow: ${({ $online, theme }) => $online ? `0 0 8px ${theme.green}` : 'none'};
-  transition: background 0.3s;
-`;
+export const HeaderRight = styled.div`display: flex; align-items: center; gap: 4px; margin-left: auto;`;
 
 export const HeaderTitle = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.3px;
@@ -43,7 +39,7 @@ export const HeaderTitle = styled.span`
 export const IconBtn = styled.button`
   width: 40px; height: 40px;
   border-radius: 50%;
-  color: ${({ theme }) => theme.text2};
+  color: ${({ theme }) => theme.accent2};
   display: flex;
   align-items: center;
   justify-content: center;

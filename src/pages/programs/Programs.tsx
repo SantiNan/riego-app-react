@@ -6,7 +6,7 @@ import { useIrrigation } from '../../hooks/useIrrigation';
 import { useToast } from '../../components/Toast';
 import { sortByTime } from '../../lib/programs';
 import {
-  Wrapper, Header, HeaderLeft, HeaderRight, StatusDot,
+  Wrapper, Header, HeaderRight,
   HeaderTitle, IconBtn, Content, EmptyState, EmptyIcon,
   EmptyTitle, EmptySub, Spinner,
 } from './Programs.styles';
@@ -40,10 +40,7 @@ export function Programs() {
   return (
     <Wrapper>
       <Header>
-        <HeaderLeft>
-          <StatusDot $online={connected} />
-          <HeaderTitle>RIEGO BASQUADE</HeaderTitle>
-        </HeaderLeft>
+        <HeaderTitle>PROGRAMAS</HeaderTitle>
         <HeaderRight>
           <IconBtn onClick={() => navigate('/program/new')} title="Nuevo programa">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
